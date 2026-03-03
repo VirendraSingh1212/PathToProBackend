@@ -1,25 +1,36 @@
-import { z } from "zod";
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
+import path from 'path';
 
-dotenv.config();
+// Load .env file from the backend root
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
-const envSchema = z.object({
-    PORT: z.string().default("5000").transform(Number),
-    DATABASE_URL: z.string().min(1),
-    JWT_ACCESS_SECRET: z.string().min(1),
-    JWT_REFRESH_SECRET: z.string().min(1),
-    ACCESS_TOKEN_EXPIRES_IN: z.string().default("15m"),
-    REFRESH_TOKEN_EXPIRES_IN: z.string().default("30d"),
-    CORS_ORIGIN: z.string().default("http://localhost:3000"),
-    COOKIE_DOMAIN: z.string().default("localhost"),
-    NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
-});
+const requiredEnvs = [
+    'PORT',
+    'DATABASE_URL',
+    'JWT_ACCESS_SECRET',
+    'JWT_REFRESH_SECRET',
+    'CORS_ORIGIN',
+    'NODE_ENV',
+] as const;
 
-const _env = envSchema.safeParse(process.env);
+export const env = {
+    PORT: process.env.PORT || '5000',
+    DATABASE_URL: process.env.DATABASE_URL!,
+    JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET!,
+    JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET!,
+    JWT_ACCESS_EXPIRY: process.env.JWT_ACCESS_EXPIRY || '15m',
+    JWT_REFRESH_EXPIRY: process.env.JWT_REFRESH_EXPIRY || '30d',
+    CORS_ORIGIN: process.env.CORS_ORIGIN!,
+    NODE_ENV: process.env.NODE_ENV || 'development',
+    REFRESH_TOKEN_DOMAIN: process.env.REFRESH_TOKEN_DOMAIN,
+};
 
-if (!_env.success) {
-    console.error("❌ Invalid environment variables:", _env.error.format());
-    process.exit(1);
+// Validate required environment variables
+for (const key of requiredEnvs) {
+    if (!process.env[key]) {
+        console.error(`❌ Missing required environment variable: ${key}`);
+        process.exit(1);
+    }
 }
 
-export const env = _env.data;
+export default env;

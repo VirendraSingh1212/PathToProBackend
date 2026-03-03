@@ -1,30 +1,49 @@
-import app from "./app";
-import { env } from "./config/env";
-import { prisma } from "./config/db";
+import app from './app';
+import env from './config/env';
+import prisma from './config/prisma';
+import { Server } from 'http';
 
-const PORT = env.PORT;
+const port = env.PORT;
 
-const server = app.listen(PORT, () => {
-    console.log(`🚀 Server is listening on port ${PORT}`);
-    console.log(`🌍 Environment: ${env.NODE_ENV}`);
+const server: Server = app.listen(port, async () => {
+    console.log(`
+  🚀 Server is running!
+  📡 Port: ${port}
+  🌍 Environment: ${env.NODE_ENV}
+  `);
+
+    try {
+        await prisma.$connect();
+        console.log('  ✅ Connected to PostgreSQL (Neon)');
+    } catch (error) {
+        console.error('  ❌ Database connection failed:', error);
+        process.exit(1);
+    }
 });
 
 // Graceful Shutdown
 const shutdown = async (signal: string) => {
-    console.log(`\n🛑 Received ${signal}. Shutting down gracefully...`);
+    console.log(`\nReceived ${signal}. Starting graceful shutdown...`);
+
     server.close(async () => {
-        console.log("⏸️ HTTP server closed.");
-        await prisma.$disconnect();
-        console.log("💾 Database connection closed.");
-        process.exit(0);
+        console.log('  🛑 HTTP server closed.');
+
+        try {
+            await prisma.$disconnect();
+            console.log('  🔌 Prisma disconnected.');
+            process.exit(0);
+        } catch (error) {
+            console.error('  ❌ Error during Prisma disconnection:', error);
+            process.exit(1);
+        }
     });
 
     // Force shutdown if it takes too long
     setTimeout(() => {
-        console.error("⚠️ Forcefully shutting down...");
+        console.error('  ⚠️ Could not close connections in time, forcefully shutting down');
         process.exit(1);
     }, 10000);
 };
 
-process.on("SIGINT", () => shutdown("SIGINT"));
-process.on("SIGTERM", () => shutdown("SIGTERM"));
+process.on('SIGINT', () => shutdown('SIGINT'));
+process.on('SIGTERM', () => shutdown('SIGTERM'));
