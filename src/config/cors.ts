@@ -4,6 +4,7 @@ import env from './env';
 const allowedOrigins = [
     'http://localhost:3000',
     'https://path-to-pro-frontend.vercel.app',
+    'https://path-to-pro-frontend-8kucfh94c-virendrasingh1212s-projects.vercel.app',
     env.CORS_ORIGIN,
 ].filter(Boolean) as string[];
 
