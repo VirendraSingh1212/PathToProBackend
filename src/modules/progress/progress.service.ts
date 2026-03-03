@@ -1,4 +1,4 @@
-import { prisma } from "../../config/db";
+import { prisma } from "../../config/prisma";
 import { UpdateProgressInput } from "./progress.schema";
 
 export const getVideoProgress = async (videoId: string, userId: string) => {

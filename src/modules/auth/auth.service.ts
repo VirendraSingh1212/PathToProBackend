@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { prisma } from "../../config/db";
+import { prisma } from "../../config/prisma";
 import { env } from "../../config/env";
 import { RegisterInput, LoginInput } from "./auth.schema";
 import crypto from "crypto";

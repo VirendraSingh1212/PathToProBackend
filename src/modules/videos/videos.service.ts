@@ -1,4 +1,4 @@
-import { prisma } from "../../config/db";
+import { prisma } from "../../config/prisma";
 
 export const getVideoDetails = async (videoId: string, userId: string) => {
     // 1. Fetch current video to get its context within the subject

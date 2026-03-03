@@ -10,10 +10,10 @@ export const errorMiddleware = (
     const statusCode = err.status || 500;
     const message = err.message || 'Internal server error';
 
-    // Log error internally
+    // Log error internally (always log stack for debugging)
     console.error(`[Error] ${req.method} ${req.url}:`, {
         message: err.message,
-        stack: env.NODE_ENV === 'development' ? err.stack : undefined,
+        stack: err.stack,
     });
 
     res.status(statusCode).json({
