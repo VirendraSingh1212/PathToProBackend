@@ -1,5 +1,8 @@
-import express from 'express';
 import { Router } from 'express';
+import authRoutes from '../modules/auth/auth.routes';
+import subjectRoutes from '../modules/subjects/subjects.routes';
+import videoRoutes from '../modules/videos/videos.routes';
+import progressRoutes from '../modules/progress/progress.routes';
 import env from '../config/env';
 
 const router = Router();
@@ -13,5 +16,11 @@ router.get('/health', (req, res) => {
         timestamp: new Date().toISOString(),
     });
 });
+
+// Module Routes
+router.use('/auth', authRoutes);
+router.use('/subjects', subjectRoutes);
+router.use('/videos', videoRoutes);
+router.use('/progress', progressRoutes);
 
 export default router;
