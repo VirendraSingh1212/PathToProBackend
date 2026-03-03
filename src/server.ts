@@ -47,3 +47,13 @@ const shutdown = async (signal: string) => {
 
 process.on('SIGINT', () => shutdown('SIGINT'));
 process.on('SIGTERM', () => shutdown('SIGTERM'));
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('  ⚠️ Unhandled Rejection at:', promise, 'reason:', reason);
+    // Log but do not crash the server
+});
+
+process.on('uncaughtException', (error) => {
+    console.error('  🚨 Uncaught Exception:', error);
+    // Log but do not crash the server as per requirements
+});
