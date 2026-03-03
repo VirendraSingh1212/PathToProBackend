@@ -1,14 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyAccessToken } from '../config/security';
 
-export interface LMSAuthRequest extends Request {
-    lmsUser?: {
-        userId: string;
-    };
-}
-
 export const authMiddleware = (
-    req: LMSAuthRequest,
+    req: Request,
     res: Response,
     next: NextFunction
 ) => {
@@ -25,7 +19,7 @@ export const authMiddleware = (
         const token = authHeader.split(' ')[1];
         const decoded = verifyAccessToken(token);
 
-        req.lmsUser = decoded;
+        req.user = decoded;
         next();
     } catch (error) {
         console.error('Auth middleware error:', error);
@@ -35,5 +29,7 @@ export const authMiddleware = (
         });
     }
 };
+
+export const requireAuth = authMiddleware;
 
 export default authMiddleware;

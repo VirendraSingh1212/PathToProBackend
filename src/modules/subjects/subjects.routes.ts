@@ -1,6 +1,6 @@
 import { Router } from "express";
 import * as subjectsController from "./subjects.controller";
-import { requireAuth } from "../../middlewares/auth.middleware";
+import { requireAuth } from "../../middleware/auth.middleware";
 
 const router = Router();
 

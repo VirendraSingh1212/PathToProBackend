@@ -1,7 +1,7 @@
 import { Router } from "express";
 import * as progressController from "./progress.controller";
-import { requireAuth } from "../../middlewares/auth.middleware";
-import { validate } from "../../middlewares/validate.middleware";
+import { requireAuth } from "../../middleware/auth.middleware";
+import { validate } from "../../middleware/validate.middleware";
 import { updateProgressSchema } from "./progress.schema";
 
 const router = Router();

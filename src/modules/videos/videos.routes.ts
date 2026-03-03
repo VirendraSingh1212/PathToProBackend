@@ -1,6 +1,6 @@
 import { Router } from "express";
 import * as videosController from "./videos.controller";
-import { requireAuth } from "../../middlewares/auth.middleware";
+import { requireAuth } from "../../middleware/auth.middleware";
 
 const router = Router();
 

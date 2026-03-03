@@ -18,10 +18,13 @@ export const env = {
     DATABASE_URL: process.env.DATABASE_URL!,
     JWT_ACCESS_SECRET: process.env.JWT_ACCESS_SECRET!,
     JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET!,
-    JWT_ACCESS_EXPIRY: process.env.JWT_ACCESS_EXPIRY || '15m',
-    JWT_REFRESH_EXPIRY: process.env.JWT_REFRESH_EXPIRY || '30d',
+    JWT_ACCESS_EXPIRY: process.env.JWT_ACCESS_EXPIRY || process.env.ACCESS_TOKEN_EXPIRES_IN || '15m',
+    JWT_REFRESH_EXPIRY: process.env.JWT_REFRESH_EXPIRY || process.env.REFRESH_TOKEN_EXPIRES_IN || '30d',
+    ACCESS_TOKEN_EXPIRES_IN: process.env.ACCESS_TOKEN_EXPIRES_IN || process.env.JWT_ACCESS_EXPIRY || '15m',
+    REFRESH_TOKEN_EXPIRES_IN: process.env.REFRESH_TOKEN_EXPIRES_IN || process.env.JWT_REFRESH_EXPIRY || '30d',
     CORS_ORIGIN: process.env.CORS_ORIGIN!,
     NODE_ENV: process.env.NODE_ENV || 'development',
+    COOKIE_DOMAIN: process.env.REFRESH_TOKEN_DOMAIN || process.env.COOKIE_DOMAIN,
     REFRESH_TOKEN_DOMAIN: process.env.REFRESH_TOKEN_DOMAIN,
 };
 
