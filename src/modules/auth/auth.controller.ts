@@ -5,9 +5,9 @@ import { env } from "../../config/env";
 const COOKIE_OPTIONS = {
     httpOnly: true,
     secure: env.NODE_ENV === "production",
-    sameSite: "strict" as const,
+    sameSite: (env.NODE_ENV === "production" ? "none" : "lax") as "none" | "lax",
     domain: env.COOKIE_DOMAIN === "localhost" ? undefined : env.COOKIE_DOMAIN,
-    path: "/api/auth/refresh",
+    path: "/",
 };
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
