@@ -6,6 +6,11 @@ import { errorMiddleware } from './middleware/error.middleware';
 import { notFoundMiddleware } from './middleware/notFound.middleware';
 import apiRoutes from './routes/index';
 
+// BigInt Serialization Support
+(BigInt.prototype as any).toJSON = function () {
+    return this.toString();
+};
+
 const app: Application = express();
 
 // Middleware
