@@ -4,7 +4,11 @@ import * as progressService from "./progress.service";
 export const getVideoProgress = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { videoId } = req.params;
-        const userId = req.user!.userId;
+        const userId = req.user?.userId;
+        if (!userId) {
+            res.status(401).json({ success: false, message: "Unauthorized" });
+            return;
+        }
         const progress = await progressService.getVideoProgress(videoId as string, userId);
         res.status(200).json({ success: true, data: progress });
     } catch (error) {
@@ -15,7 +19,11 @@ export const getVideoProgress = async (req: Request, res: Response, next: NextFu
 export const updateVideoProgress = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { videoId } = req.params;
-        const userId = req.user!.userId;
+        const userId = req.user?.userId;
+        if (!userId) {
+            res.status(401).json({ success: false, message: "Unauthorized" });
+            return;
+        }
         const progress = await progressService.upsertVideoProgress(videoId as string, userId, req.body);
         res.status(200).json({ success: true, data: progress });
     } catch (error: any) {
@@ -30,7 +38,11 @@ export const updateVideoProgress = async (req: Request, res: Response, next: Nex
 export const getSubjectProgress = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { subjectId } = req.params;
-        const userId = req.user!.userId;
+        const userId = req.user?.userId;
+        if (!userId) {
+            res.status(401).json({ success: false, message: "Unauthorized" });
+            return;
+        }
         const progress = await progressService.getSubjectProgress(subjectId as string, userId);
         res.status(200).json({ success: true, data: progress });
     } catch (error: any) {

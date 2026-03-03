@@ -43,3 +43,17 @@ export const getSubjectTree = async (req: Request, res: Response, next: NextFunc
         next(error);
     }
 };
+
+export const getFirstVideo = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { id } = req.params;
+        const result = await subjectsService.getFirstVideo(id as string);
+        res.status(200).json({ success: true, data: result });
+    } catch (error: any) {
+        if (error.code === 'P2023') {
+            res.status(404).json({ success: false, message: "Subject not found" });
+            return;
+        }
+        next(error);
+    }
+};

@@ -7,19 +7,18 @@ export const errorMiddleware = (
     res: Response,
     next: NextFunction
 ) => {
-    const statusCode = err.status || 500;
-    const message = err.message || 'Internal server error';
+    const statusCode = err.statusCode || err.status || 500;
+    const isProd = env.NODE_ENV === 'production';
+    const message = statusCode === 500 && isProd ? 'Something went wrong' : (err.message || 'Internal server error');
 
     // Log error internally (always log stack for debugging)
-    console.error(`[Error] ${req.method} ${req.url}:`, {
-        message: err.message,
-        stack: err.stack,
-    });
+    console.error(`[Error] ${req.method} ${req.url}:`, err);
 
     res.status(statusCode).json({
         success: false,
+        ...(statusCode === 500 && { error: 'Internal Server Error' }),
         message,
-        ...(env.NODE_ENV === 'development' && { stack: err.stack }),
+        ...(!isProd && { stack: err.stack }),
     });
 };
 

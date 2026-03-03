@@ -22,7 +22,21 @@ export const getSubjectById = async (id: string) => {
 };
 
 export const getSubjectTree = async (subjectId: string, userId: string) => {
-    // 1. Fetch entire subject structure ordered strictly
+    // 1. Check if user is enrolled
+    const enrollment = await prisma.enrollment.findUnique({
+        where: {
+            user_id_subject_id: {
+                user_id: BigInt(userId),
+                subject_id: subjectId,
+            },
+        },
+    });
+
+    if (!enrollment) {
+        return { enrolled: false, message: "User not enrolled in this subject" };
+    }
+
+    // 2. Fetch entire subject structure ordered strictly
     const subject = await prisma.subject.findUnique({
         where: { id: subjectId },
         select: {
@@ -49,7 +63,7 @@ export const getSubjectTree = async (subjectId: string, userId: string) => {
 
     if (!subject) throw Object.assign(new Error("Subject not found"), { statusCode: 404 });
 
-    // 2. Fetch user progress for these videos
+    // 3. Fetch user progress for these videos
     const userProgress = await prisma.videoProgress.findMany({
         where: {
             user_id: BigInt(userId),
@@ -59,7 +73,7 @@ export const getSubjectTree = async (subjectId: string, userId: string) => {
 
     const progressMap = new Map<string, boolean>(userProgress.map((p: any) => [p.video_id, p.is_completed]));
 
-    // 3. Flatten videos to calculate locking logic
+    // 4. Flatten videos to calculate locking logic
     let previousVideoCompleted = true; // The first video is always unlocked
 
     const sectionsWithState = subject.sections.map((section: any) => {
@@ -90,6 +104,23 @@ export const getSubjectTree = async (subjectId: string, userId: string) => {
     return {
         id: subject.id,
         title: subject.title,
+        enrolled: true,
         sections: sectionsWithState,
+    };
+};
+
+export const getFirstVideo = async (subjectId: string) => {
+    const firstVideo = await prisma.video.findFirst({
+        where: { section: { subject_id: subjectId } },
+        orderBy: [
+            { section: { order_index: "asc" } },
+            { order_index: "asc" },
+        ],
+        select: { id: true },
+    });
+
+    return {
+        videoId: firstVideo?.id || null,
+        message: firstVideo ? undefined : "No videos available"
     };
 };
