@@ -49,6 +49,7 @@ model Section {
 
   subject    Subject  @relation(fields: [subject_id], references: [id], onDelete: Cascade)
   videos     Video[]
+  lessons    Lesson[]
 
   @@unique([subject_id, order_index])
   @@map("sections")
@@ -70,6 +71,21 @@ model Video {
 
   @@unique([section_id, order_index])
   @@map("videos")
+}
+
+model Lesson {
+  id          String   @id @default(uuid())
+  section_id  String
+  title       String
+  video_url   String?
+  duration    Int?
+  position    Int
+  is_preview  Boolean  @default(false)
+  created_at  DateTime @default(now())
+
+  section     Section  @relation(fields: [section_id], references: [id], onDelete: Cascade)
+
+  @@map("lessons")
 }
 
 model Enrollment {

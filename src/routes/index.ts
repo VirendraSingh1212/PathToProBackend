@@ -3,6 +3,7 @@ import authRoutes from '../modules/auth/auth.routes';
 import subjectRoutes from '../modules/subjects/subjects.routes';
 import videoRoutes from '../modules/videos/videos.routes';
 import progressRoutes from '../modules/progress/progress.routes';
+import contentTreeRoutes from '../modules/contentTree/contentTree.routes';
 import env from '../config/env';
 
 const router = Router();
@@ -19,6 +20,7 @@ router.get('/health', (req, res) => {
 
 // Module Routes
 router.use('/auth', authRoutes);
+router.use('/subjects', contentTreeRoutes);  // Register BEFORE subjects to match first
 router.use('/subjects', subjectRoutes);
 router.use('/videos', videoRoutes);
 router.use('/progress', progressRoutes);
