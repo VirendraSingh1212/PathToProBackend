@@ -4,6 +4,7 @@ import subjectRoutes from '../modules/subjects/subjects.routes';
 import videoRoutes from '../modules/videos/videos.routes';
 import progressRoutes from '../modules/progress/progress.routes';
 import contentTreeRoutes from '../modules/contentTree/contentTree.routes';
+import lessonProgressRoutes from './lessonProgress.routes';
 import env from '../config/env';
 
 const router = Router();
@@ -24,5 +25,6 @@ router.use('/subjects', contentTreeRoutes);  // Register BEFORE subjects to matc
 router.use('/subjects', subjectRoutes);
 router.use('/videos', videoRoutes);
 router.use('/progress', progressRoutes);
+router.use('/lesson-progress', lessonProgressRoutes);
 
 export default router;
