@@ -5,6 +5,7 @@ import videoRoutes from '../modules/videos/videos.routes';
 import progressRoutes from '../modules/progress/progress.routes';
 import contentTreeRoutes from '../modules/contentTree/contentTree.routes';
 import lessonProgressRoutes from './lessonProgress.routes';
+import subjectTreeRoutes from './subject.routes';
 import env from '../config/env';
 
 const router = Router();
@@ -23,6 +24,7 @@ router.get('/health', (req, res) => {
 router.use('/auth', authRoutes);
 router.use('/subjects', contentTreeRoutes);  // Register BEFORE subjects to match first
 router.use('/subjects', subjectRoutes);
+router.use('/subjects', subjectTreeRoutes);  // New route for subject tree with YouTube conversion
 router.use('/videos', videoRoutes);
 router.use('/progress', progressRoutes);
 router.use('/lesson-progress', lessonProgressRoutes);
