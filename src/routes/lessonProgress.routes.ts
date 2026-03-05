@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import * as lessonProgressController from '../../controllers/progress.controller';
-import { requireAuth } from '../../middleware/auth.middleware';
+import * as lessonProgressController from '../controllers/progress.controller';
+import { requireAuth } from '../middleware/auth.middleware';
 
 const router = Router();
 
