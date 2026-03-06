@@ -14,7 +14,7 @@ router.post("/message", async (req, res) => {
 
     try {
         const response = await fetch(
-            "https://api-inference.huggingface.co/models/google/flan-t5-large",
+            "https://router.huggingface.co/v1/chat/completions",
             {
                 method: "POST",
                 headers: {
@@ -22,21 +22,22 @@ router.post("/message", async (req, res) => {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    inputs: message
+                    model: "meta-llama/Llama-3.2-3B-Instruct",
+                    messages: [{ role: "user", content: message }],
+                    max_tokens: 500
                 })
             }
         )
 
         const data = await response.json() as any
 
-        // Handle potential API errors from Hugging Face
         if (data.error) {
             console.error("Hugging Face API Error:", data.error);
-            throw new Error(data.error);
+            throw new Error(data.error.message || data.error);
         }
 
         const reply =
-            data?.[0]?.generated_text ||
+            data?.choices?.[0]?.message?.content ||
             "Sorry, I couldn't generate a response."
 
         return res.json({
