@@ -6,6 +6,7 @@ import { errorMiddleware } from './middleware/error.middleware';
 import { notFoundMiddleware } from './middleware/notFound.middleware';
 import apiRoutes from './routes/index';
 import chatbotRoutes from './modules/chatbot/chatbot.routes';
+import stableChatbotRoutes from './routes/chatbot.routes';
 
 // BigInt Serialization Support
 (BigInt.prototype as any).toJSON = function () {
@@ -25,6 +26,7 @@ app.use('/api', apiRoutes);
 
 // Chatbot Route (isolated, no dependency on existing modules)
 app.use('/api', chatbotRoutes);
+app.use('/api/chatbot', stableChatbotRoutes);
 
 // Error Handling Middlewares
 app.use(notFoundMiddleware);
