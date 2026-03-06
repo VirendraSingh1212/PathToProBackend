@@ -5,6 +5,7 @@ import corsOptions from './config/cors';
 import { errorMiddleware } from './middleware/error.middleware';
 import { notFoundMiddleware } from './middleware/notFound.middleware';
 import apiRoutes from './routes/index';
+import chatbotRoutes from './modules/chatbot/chatbot.routes';
 
 // BigInt Serialization Support
 (BigInt.prototype as any).toJSON = function () {
@@ -21,6 +22,9 @@ app.use(cookieParser());
 
 // Root API Routes
 app.use('/api', apiRoutes);
+
+// Chatbot Route (isolated, no dependency on existing modules)
+app.use('/api', chatbotRoutes);
 
 // Error Handling Middlewares
 app.use(notFoundMiddleware);
