@@ -22,7 +22,7 @@ router.post("/message", async (req, res) => {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    model: process.env.HF_MODEL || "mistralai/Mistral-7B-Instruct-v0.2",
+                    model: process.env.HF_MODEL || "Qwen/Qwen2.5-7B-Instruct",
                     messages: [{ role: "user", content: message }],
                     max_tokens: 500
                 })
