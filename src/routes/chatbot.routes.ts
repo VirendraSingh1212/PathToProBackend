@@ -22,7 +22,7 @@ router.post("/message", async (req, res) => {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    model: "meta-llama/Llama-3.2-3B-Instruct",
+                    model: process.env.HF_MODEL || "mistralai/Mistral-7B-Instruct-v0.2",
                     messages: [{ role: "user", content: message }],
                     max_tokens: 500
                 })
